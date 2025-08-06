@@ -1,0 +1,32 @@
+import os
+from dotenv import load_dotenv
+from groq import Client
+
+load_dotenv()  # Load environment variables from .env
+
+# Create the client only once
+groq_client = Client(api_key=os.getenv("GROQ_API_KEY"))
+
+def translate_text(text, target_language):
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a highly accurate language translator. "
+                        "Always return only the translated text without any additional commentary or explanations."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Translate the following text to {target_language}. Return only the translated text. Text: {text}"
+                }
+            ],
+            temperature=0.3
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return f"Translation failed: {str(e)}"

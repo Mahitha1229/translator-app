@@ -1,0 +1,8 @@
+Flask
+Flask-SocketIO
+SpeechRecognition
+gTTS
+groq
+python-socketio
+eventlet
+python-dotenv
